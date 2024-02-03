@@ -36,7 +36,10 @@ const App = () => {
 
     try {
       const response = await axios.post(backendEndpoint, { password }, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json' // Setting Content-Type 
+        },
         withCredentials: true
       });
       setStrength(response.data.strength);
