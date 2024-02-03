@@ -34,6 +34,8 @@ const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 
+axios.get('/auth', { withCredentials: true });
+
 // Dummy authentication endpoint to get a token
 app.get('/auth', (req, res) => {
   const payload = {
