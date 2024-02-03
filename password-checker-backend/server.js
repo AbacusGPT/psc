@@ -3,8 +3,19 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const app = express();
-
 const cors = require('cors');
+
+// CORS Logging Middleware
+const corsLoggingMiddleware = (req, res, next) => {
+  console.log('Incoming Request:', req.method, req.path);
+  console.log('Origin:', req.headers.origin);
+  console.log('Access-Control-Request-Method:', req.headers['access-control-request-method']);
+  console.log('Access-Control-Request-Headers:', req.headers['access-control-request-headers']);
+  next();
+};
+
+app.use(corsLoggingMiddleware);
+
 // Detailed CORS Configuration
 const corsOptions = {
   origin: function (origin, callback) {
