@@ -5,14 +5,27 @@ const axios = require('axios');
 const app = express();
 
 const cors = require('cors');
+// Detailed CORS Configuration
 const corsOptions = {
-    origin:'*', 
-    allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Methods", "Access-Control-Request-Headers"],
-    credentials: true,
-    enablePreflight: true
-}
-app.use(cors(corsOptions)); // This will allow all domains. For production, configure allowed origins.
-app.options('*',cors(corsOptions))// include before other routes
+  origin: function (origin, callback) {
+      // List of allowed origins, add your frontend origin here
+      const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL]; 
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+          callback(null, true);
+      } else {
+          callback(new Error('CORS not allowed from this origin'));
+      }
+  },
+  credentials: true, // Allow sending cookies from the frontend
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'OPTIONS'], // Allowed request methods
+  preflightContinue: false,
+  optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 const PORT = process.env.PORT || 5000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Your OpenAI API key stored in .env
