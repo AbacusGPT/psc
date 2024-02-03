@@ -5,7 +5,12 @@ const axios = require('axios');
 const app = express();
 
 const cors = require('cors');
-app.use(cors()); // This will allow all domains. For production, configure allowed origins.
+const corsOptions = {
+    allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Methods", "Access-Control-Request-Headers"],
+    credentials: true,
+    enablePreflight: true
+}
+app.use(cors(corsOptions)); // This will allow all domains. For production, configure allowed origins.
 app.options('*',cors())// include before other routes
 
 const PORT = process.env.PORT || 5000;
