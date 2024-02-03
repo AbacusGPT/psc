@@ -34,15 +34,13 @@ const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 
-axios.get('/auth', { withCredentials: true });
-
 // Dummy authentication endpoint to get a token
 app.get('/auth', (req, res) => {
   const payload = {
     user: 'user_id', // Typically, you would use user details here
     role: 'user_role' // Example role
   };
-
+  axios.get('/auth', { withCredentials: true });
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Token expires in 1 hour
 
   res.send({ token });
@@ -85,12 +83,15 @@ app.post('/check-password', verifyToken, async (req, res) => {
   };
 
   try {
-    const response = await axios.post(apiEndpoint, payload, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+    const response = await axios.post(apiEndpoint, payload, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        },
+        withCredentials: true
       },
-    });
+    );
 
     const assistantContent = response.data.choices[0].message.content;
     res.send({ strength: assistantContent });
