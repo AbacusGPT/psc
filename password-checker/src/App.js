@@ -30,15 +30,14 @@ const App = () => {
     if (!password) {
       setStrength('Password cannot be empty'); // Set strength to empty if password is empty
       return; // Stop the function from proceeding further
-    }
+    } 
 
     const backendEndpoint = `${process.env.REACT_APP_BACKEND_URL}/check-password`; // Use the full URL if your backend is hosted separately
 
     try {
       const response = await axios.post(backendEndpoint, { password }, {
-        headers: {
-          Authorization: `Bearer ${token}` // Use token in request headers
-        }
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true
       });
       setStrength(response.data.strength);
     } catch (error) {
