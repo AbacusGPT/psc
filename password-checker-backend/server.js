@@ -11,7 +11,7 @@ const corsOptions = {
     enablePreflight: true
 }
 app.use(cors(corsOptions)); // This will allow all domains. For production, configure allowed origins.
-app.options('*',cors())// include before other routes
+app.options('*',cors(corsOptions))// include before other routes
 
 const PORT = process.env.PORT || 5000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Your OpenAI API key stored in .env
