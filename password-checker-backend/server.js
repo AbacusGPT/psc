@@ -6,6 +6,7 @@ const app = express();
 
 const cors = require('cors');
 const corsOptions = {
+    origin:'*', 
     allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Methods", "Access-Control-Request-Headers"],
     credentials: true,
     enablePreflight: true
