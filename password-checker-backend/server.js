@@ -14,54 +14,68 @@ const corsLoggingMiddleware = (req, res, next) => {
   next();
 };
 
-app.use(corsLoggingMiddleware);
+// app.use(corsLoggingMiddleware);
 
 // Detailed CORS Configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-      // List of allowed origins, add your frontend origin here
-      const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL]; 
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-          callback(null, true);
-      } else {
-          callback(new Error('CORS not allowed from this origin'));
-      }
-  },
-  credentials: true, // Allow sending cookies from the frontend
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'OPTIONS'], // Allowed request methods
-  preflightContinue: false,
-  optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//       // List of allowed origins, add your frontend origin here
+//       const allowedOrigins = [process.env.REACT_APP_FRONTEND_URL]; 
+//       // Allow requests with no origin (like mobile apps or curl requests)
+//       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+//           callback(null, true);
+//       } else {
+//           callback(new Error('CORS not allowed from this origin'));
+//       }
+//   },
+//   credentials: true, // Allow sending cookies from the frontend
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   methods: ['GET', 'POST', 'OPTIONS'], // Allowed request methods
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
-const allowCors = fn => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
+// const allowCors = fn => async (req, res) => {
+//   res.setHeader('Access-Control-Allow-Credentials', true)
+//   res.setHeader('Access-Control-Allow-Origin', '*')
+//   // another common pattern
+//   // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+//   res.setHeader(
+//     'Access-Control-Allow-Headers',
+//     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+//   )
+//   if (req.method === 'OPTIONS') {
+//     res.status(200).end()
+//     return
+//   }
+//   return await fn(req, res)
+// }
+
+// const handler = (req, res) => {
+//   const d = new Date()
+//   res.end(d.toString())
+// }
+
+// module.exports = allowCors(handler)
+
+// CORS Middleware
+function allowCors(req, res, next) {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', process.env.REACT_APP_FRONTEND_URL); // Ideally, this should not be '*', but the origin of your frontend app
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Include 'Authorization'
   if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
+    return res.status(200).end();
   }
-  return await fn(req, res)
+  next();
 }
 
-const handler = (req, res) => {
-  const d = new Date()
-  res.end(d.toString())
-}
-
-module.exports = allowCors(handler)
-
+// Use the CORS middleware
+app.use(allowCors);
 
 const PORT = process.env.PORT || 5000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Your OpenAI API key stored in .env
