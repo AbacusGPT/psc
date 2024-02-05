@@ -79,15 +79,15 @@ function allowCors(req, res, next) {
 // Use the CORS middleware
 app.use(allowCors);
 
-const corsOptions = {
-  origin:  process.env.REACT_APP_FRONTEND_URL, // Set this to your frontend's URL
-  credentials: true,
-  methods: 'GET,POST,OPTIONS',
-  allowedHeaders: 'Content-Type,Authorization'
-};
+// const corsOptions = {
+//   origin:  process.env.REACT_APP_FRONTEND_URL, // Set this to your frontend's URL
+//   credentials: true,
+//   methods: 'GET,POST,OPTIONS',
+//   allowedHeaders: 'Content-Type,Authorization'
+// };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+// app.use(cors(corsOptions));
+app.options('*', cors()); // Enable pre-flight for all routes
 
 const PORT = process.env.PORT || 5000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Your OpenAI API key stored in .env
