@@ -62,7 +62,7 @@ const corsLoggingMiddleware = (req, res, next) => {
 
 // module.exports = allowCors(handler)
 
-// CORS Middleware
+//CORS Middleware
 function allowCors(req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', process.env.REACT_APP_FRONTEND_URL); // Ideally, this should not be '*', but the origin of your frontend app
@@ -79,12 +79,23 @@ function allowCors(req, res, next) {
 // Use the CORS middleware
 app.use(allowCors);
 
-// const corsOptions = {
-//   origin:  process.env.REACT_APP_FRONTEND_URL, // Set this to your frontend's URL
-//   credentials: true,
-//   methods: 'GET,POST,OPTIONS',
-//   allowedHeaders: 'Content-Type,Authorization'
-// };
+const corsOptions = {
+  origin:  process.env.REACT_APP_FRONTEND_URL, // Set this to your frontend's URL
+  credentials: true,
+  methods: 'GET,POST,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization'
+};
+
+// Specific origin
+app.use(cors({
+  origin: process.env.REACT_APP_FRONTEND_URL // Replace with your frontend's origin
+}));
+
+// Or, to dynamically allow the requesting origin (use with caution)
+app.use(cors({
+  origin: (origin, callback) => callback(null, origin),
+  credentials: true // if your frontend needs to send cookies or authentication headers
+}));
 
 // app.use(cors(corsOptions));
 app.options('*', cors()); // Enable pre-flight for all routes
