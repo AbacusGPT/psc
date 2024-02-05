@@ -38,6 +38,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
+// Middleware to manually set CORS headers for specific routes if needed
+function setCorsHeaders(req, res, next) {
+  res.header('Access-Control-Allow-Origin', process.env.REACT_APP_FRONTEND_URL); // Set to frontend app URL
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+}
+
 const PORT = process.env.PORT || 5000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Your OpenAI API key stored in .env
 const SECRET_KEY = process.env.SECRET_KEY; // Use SECRET_KEY from .env
@@ -46,7 +55,7 @@ const jwt = require('jsonwebtoken');
 app.use(express.json());
 
 // Dummy authentication endpoint to get a token
-app.get('/auth', (req, res) => {
+app.get('/auth', setCorsHeaders, (req, res) => {
   const payload = {
     user: 'user_id', // Typically, you would use user details here
     role: 'user_role' // Example role
@@ -78,7 +87,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-app.post('/check-password', verifyToken, async (req, res) => {
+app.post('/check-password', setCorsHeaders, verifyToken, async (req, res) => {
   console.log(req.body); // Log the request body to see what's being received
   const password = req.body.password; // Make sure this line is present and uncommented
 
