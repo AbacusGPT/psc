@@ -69,13 +69,25 @@ function allowCors(req, res, next) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Include 'Authorization'
   if (req.method === 'OPTIONS') {
+    console.log('Sending headers for OPTIONS request:', res.getHeaders());
     return res.status(200).end();
   }
+  console.log('Sending headers for non-OPTIONS request:', res.getHeaders());
   next();
 }
 
 // Use the CORS middleware
 app.use(allowCors);
+
+const corsOptions = {
+  origin:  process.env.REACT_APP_FRONTEND_URL, // Set this to your frontend's URL
+  credentials: true,
+  methods: 'GET,POST,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization'
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 const PORT = process.env.PORT || 5000;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Your OpenAI API key stored in .env
