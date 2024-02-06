@@ -1,9 +1,16 @@
 // server.js
+const PasswordStrengthChecker = require('./PasswordStrengthChecker'); // Adjust the path as necessary
+
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const app = express();
 const cors = require('cors');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Temporary storage for uploaded files
+const csvParser = require('csv-parser');
+const fs = require('fs');
+const path = require('path');
 
 // CORS Logging Middleware
 const corsLoggingMiddleware = (req, res, next) => {
@@ -140,39 +147,50 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+const passwordStrengthChecker = new PasswordStrengthChecker(process.env.OPENAI_API_KEY);  
+
 app.post('/check-password', verifyToken, async (req, res) => {
-  console.log(req.body); // Log the request body to see what's being received
-  const password = req.body.password; // Make sure this line is present and uncommented
+    console.log(req.body); // Log the request body to see what's being received
+    const { password } = req.body; // Destructure password from the request body
 
-  const apiEndpoint = "https://api.openai.com/v1/chat/completions";
-
-  const payload = {
-    messages: [
-      { role: "system", content: "You are a helpful assistant." },
-      { role: "user", content: `Check if the password '${password}' is strong, or weak. Please only answer 'strong', 'weak'.` },
-    ],
-    model: "gpt-4",
-    max_tokens: 500,
-  };
-
-  try {
-    const response = await axios.post(apiEndpoint, payload, 
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        },
-        withCredentials: true
-      },
-    );
-
-    const assistantContent = response.data.choices[0].message.content;
-    res.send({ strength: assistantContent });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send({ error: 'Error checking password strength.' });
-  }
+    try {
+        const strength = await passwordStrengthChecker.checkStrength(password);
+        res.send({ strength });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send({ error: 'Error checking password strength.' });
+    }
 });
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  const results = [];
+
+  if (!req.file) {
+      return res.status(400).send({ message: 'No file uploaded.' });
+  }
+
+  const filePath = path.join(__dirname, req.file.path);
+
+  fs.createReadStream(filePath)
+      .pipe(csvParser())
+      .on('data', (data) => results.push(data))
+      .on('end', async () => {
+          try {
+              const passwordStrengths = await Promise.all(results.map(async (row) => {
+                  const password = row.password; // Assuming CSV has 'password' column
+                  const strength = await passwordStrengthChecker.checkStrength(password);
+                  return { password, strength };
+              }));
+
+              fs.unlinkSync(filePath); // Clean up the uploaded file
+              res.json(passwordStrengths);
+          } catch (error) {
+              console.error("Error processing file:", error);
+              res.status(500).send({ error: 'Error processing file.' });
+          }
+      });
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
