@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import multer from 'multer';
@@ -16,7 +17,12 @@ const PORT: number = parseInt(process.env.PORT as string, 10) || 5000;
 const SECRET_KEY: string = process.env.SECRET_KEY as string;
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: process.env.REACT_APP_FRONTEND_URL, // Use environment variable for the origin
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+}));
+console.log('CORS Origin:', process.env.REACT_APP_FRONTEND_URL);
 
 app.get('/auth', (req: Request, res: Response) => {
   const payload = {
