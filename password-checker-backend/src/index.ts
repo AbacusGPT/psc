@@ -1,5 +1,4 @@
 require('dotenv').config(); 
-require("./bin/www");
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import multer from 'multer';
