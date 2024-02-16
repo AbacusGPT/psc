@@ -8,7 +8,7 @@ import csvParser from 'csv-parser';
 import axios from 'axios'; // Make sure axios is imported if you're using it
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken if you're using it for token generation
 
-import { PasswordStrengthChecker } from './PasswordStrengthChecker'; // Adjust the path as necessary
+import { PasswordStrengthChecker } from '../PasswordStrengthChecker'; // Adjust the path as necessary
 
 const app = express();
 const PORT: number = parseInt(process.env.PORT as string, 10) || 5000;
