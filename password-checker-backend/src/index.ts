@@ -1,5 +1,6 @@
 require('dotenv').config(); 
 import express, { Request, Response } from 'express';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import cors from 'cors';
 import multer from 'multer';
 import fs from 'fs';
@@ -15,6 +16,11 @@ const PORT: number = parseInt(process.env.PORT as string, 10) || 8080;
 
 // Make sure the SECRET_KEY is defined in your environment variables
 const SECRET_KEY: string = process.env.SECRET_KEY as string;
+
+export default function (request: VercelRequest, response: VercelResponse) {
+  const { name = 'World' } = request.query;
+  response.send(`Hello ${name}!`);
+}
 
 app.use(express.json());
 
