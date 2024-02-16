@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken'; // Import jsonwebtoken if you're using it for to
 import { PasswordStrengthChecker } from '../PasswordStrengthChecker'; // Adjust the path as necessary
 
 const app = express();
-const PORT: number = parseInt(process.env.PORT as string, 10) || 5000;
+const PORT: number = parseInt(process.env.PORT as string, 10) || 8080;
 
 // Make sure the SECRET_KEY is defined in your environment variables
 const SECRET_KEY: string = process.env.SECRET_KEY as string;
