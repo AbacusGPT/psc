@@ -12,7 +12,8 @@ const App = () => {
   // Function to get token from backend
   const getToken = async () => {
     try {
-      const response = await axios.get('/auth');
+      //const response = await axios.get('/auth');
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/auth`);
       setToken(response.data.token);
       localStorage.setItem('jwtToken', response.data.token); // Store token in local storage
     } catch (error) {
