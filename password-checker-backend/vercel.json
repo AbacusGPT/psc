@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/auth/(.*)", "destination": "/auth" },
+    { "source": "/check-password/(.*)", "destination": "/check-password" },
+    { "source": "/upload/(.*)", "destination": "/upload" }
+]
+}
