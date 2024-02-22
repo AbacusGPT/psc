@@ -12,6 +12,19 @@ import jwt from 'jsonwebtoken'; // Import jsonwebtoken if you're using it for to
 import { PasswordStrengthChecker } from '../PasswordStrengthChecker'; // Adjust the path as necessary
 
 const app = express();
+
+// Enable CORS middleware
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 const PORT: number = parseInt(process.env.PORT as string, 10) || 8080;
 
 // Make sure the SECRET_KEY is defined in your environment variables
