@@ -16,8 +16,8 @@ export class PasswordStrengthChecker {
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: `Check if the password '${password}' is strong, or weak. Please only answer 'strong', 'weak'.` },
         ],
-        model: "gpt-4",
-        max_tokens: 500,
+        model: "gpt-3.5-turbo",
+        max_tokens: 50,
     };
 
     try {
