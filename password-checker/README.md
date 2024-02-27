@@ -1,76 +1,36 @@
-
-# Password Strength Checker Frontend
-
-This React application interacts with a backend server to evaluate the strength of passwords using the OpenAI API. It features a user-friendly interface that allows users to input a password and receive instant feedback on its strength. The application uses JWT for secure communication with the backend server.
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-Follow these instructions to get the project up and running on your local machine for development purposes.
-
-### Prerequisites
-
-- Node.js and npm installed on your machine
-- A running instance of the backend server for the Password Strength Checker
-
-### Installation
-
-Clone the repository
+First, run the development server:
 
 ```bash
-git clone <repository-url>
-cd <frontend-project-directory>
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Install dependencies
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```bash
-npm install
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Configure Environment Variables
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-Create a `.env` file in the root of the frontend project directory and specify the backend server URL from `.env.sample`:
+## Learn More
 
-```plaintext
-REACT_APP_BACKEND_URL=http://localhost:5000
-```
+To learn more about Next.js, take a look at the following resources:
 
-Adjust the REACT_APP_BACKEND_URL according to your backend server configuration.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-### Run test
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-```bash
-npm test
-```
+## Deploy on Vercel
 
-### Start the Development Server
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-```bash
-npm start
-```
-
-This will run the app in development mode. Open http://localhost:3000 to view it in your browser. The page will reload if you make edits.
-
-## Usage
-
-Enter a password into the provided input field on the webpage.
-Click the "Check Strength" button to assess the strength of the entered password.
-The application will display the strength of the password, indicated by the text color (green for strong, red for weak).
-
-## Building for Production
-
-To build the app for production, run:
-
-```bash
-npm run build
-```
-
-This builds the app to the build folder, optimizing it for the best performance.
-
-## Contributing
-
-We welcome contributions. Please feel free to fork the repository and submit pull requests.
-
-## License
-
-This project is licensed under the `MIT License`.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
