@@ -1,6 +1,7 @@
+"use client"
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
-import './App.css';
+import '../styles/App.css';
 
 interface UploadResult {
   password: string;
@@ -19,7 +20,7 @@ const App: React.FC = () => {
     // Define the function inside the effect and then call it
     const fetchToken = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/auth`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth`);
         const token = response.data.token;
         setToken(token);
         localStorage.setItem('jwtToken', token);
@@ -38,7 +39,7 @@ const App: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/check-password`, { password }, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/check-password`, { password }, {
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -66,7 +67,7 @@ const App: React.FC = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/upload`, formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
